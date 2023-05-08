@@ -1,0 +1,83 @@
+server:
+  port: 8072
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka
+
+
+spring:
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+      routes:
+        - id: student-service
+          uri: lb://student-service
+          predicates:
+          - Path=/student/**
+          filters:
+          - RemoveRequestHeader=Cookie,Set-Cookie
+
+        - id: keycloak-server
+          uri: lb://keycloak-server
+          predicates:
+            - Path=/auth/user/**
+          filters:
+            - RewritePath=/auth/user/(?<path>.*), /$\{path}
+            - RemoveRequestHeader=Cookie,Set-Cookie
+
+        - id: resource-service
+          uri: lb://resource-service
+          predicates:
+            - Path=/resource/**
+          filters:
+            - RewritePath=/resource/(?<path>.*), /$\{path}
+            - RemoveRequestHeader=Cookie,Set-Cookie
+
+        - id: course-service
+          uri: lb://course-service
+          predicates:
+            - Path=/course/**
+          filters:
+            - RewritePath=/course/(?<path>.*), /$\{path}
+            - RemoveRequestHeader=Cookie,Set-Cookie
+
+        - id: teacher-service
+          uri: lb://teacher-service
+          predicates:
+            - Path=/teacher/**
+          filters:
+            - RemoveRequestHeader=Cookie,Set-Cookie
+
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
