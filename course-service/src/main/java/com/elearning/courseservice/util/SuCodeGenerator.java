@@ -1,0 +1,57 @@
+package com.elearning.courseservice.util;
+
+import com.elearning.courseservice.model.Course;
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.id.enhanced.SequenceStyleGenerator;
+import org.hibernate.internal.util.config.ConfigurationHelper;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.type.LongType;
+import org.hibernate.type.Type;
+import org.springframework.data.mapping.MappingException;
+
+import java.io.Serializable;
+import java.time.Year;
+import java.util.Properties;
+
+public class SuCodeGenerator  extends SequenceStyleGenerator {
+
+    public static final String DATE_FORMAT_PARAMETER = "dateFormat";
+    public static final String DATE_FORMAT_DEFAULT = "%ty";
+    private String dateFormat;
+
+
+    public static final String VALUE_PREFIX_PARAMETER = "valuePrefix";
+    public static final String VALUE_PREFIX_DEFAULT = "";
+    private String valuePrefix;
+
+    private String format;
+
+    public static final String NUMBER_FORMAT_PARAMETER = "numberFormat";
+    public static final String NUMBER_FORMAT_DEFAULT = "%03d";
+
+    private String numberFormat;
+
+
+
+    @Override
+    public Serializable generate(SharedSessionContractImplementor session,
+                                 Object object) throws HibernateException {
+        String t = ((Course)object).getCoursename().contains("LAB") ? "L" : "T";
+        return String.format(dateFormat, Year.now(), super.generate(session, object))+valuePrefix +
+                String.format(format, ((Course)object).getCoursetype().toString(), super.generate(session, object)) +
+                String.format(numberFormat, super.generate(session, object))+t;
+    }
+
+    @Override
+    public void configure(Type type, Properties params,
+                          ServiceRegistry serviceRegistry) throws MappingException {
+        super.configure(LongType.INSTANCE, params, serviceRegistry);
+        dateFormat = ConfigurationHelper.getString(DATE_FORMAT_PARAMETER, params, DATE_FORMAT_DEFAULT);
+        valuePrefix = ConfigurationHelper.getString(VALUE_PREFIX_PARAMETER,params, VALUE_PREFIX_DEFAULT);
+        this.format = "%1$s";
+        numberFormat = ConfigurationHelper.getString(NUMBER_FORMAT_PARAMETER, params, NUMBER_FORMAT_DEFAULT);
+
+    }
+}
+

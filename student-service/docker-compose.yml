@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  api_service:
+    build: .
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql_db
+    links:
+      - mysql_db:app_db
+  mysql_db:
+    image: "mysql:8.0"
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: shopping
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Mahesh@2002
+      MYSQL_ROOT_PASSWORD: Mahesh@2002
+
+  studentservice:
+    image: ostock/student-service:0.0.1-SNAPSHOT
+    ports:
+      - "8091:8080"
+    environment:
+      - "SPRING_PROFILES_ACTIVE=dev"

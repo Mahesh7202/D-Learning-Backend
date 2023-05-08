@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="course-service" />
+        <module name="api-gatway" />
+        <module name="teacher-service" />
+        <module name="resources-service" />
+        <module name="configuration-server" />
+        <module name="student-service" />
+        <module name="eureka-server" />
+        <module name="keycloak-server" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="api-gatway" target="17" />
+      <module name="configuration-server" target="17" />
+      <module name="course-service" target="17" />
+      <module name="eureka-server" target="1.8" />
+      <module name="keycloak-server" target="17" />
+      <module name="resources-service" target="17" />
+      <module name="student-service" target="1.8" />
+      <module name="teacher-service" target="17" />
+      <module name="user_service" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="api-gatway" options="-parameters" />
+      <module name="configuration-server" options="-parameters" />
+      <module name="course-service" options="-parameters" />
+      <module name="eureka-server" options="-parameters" />
+      <module name="keycloak-server" options="-parameters" />
+      <module name="resources-service" options="-parameters" />
+      <module name="student-service" options="-parameters" />
+      <module name="teacher-service" options="-parameters" />
+      <module name="user_service" options="-parameters" />
+    </option>
+  </component>
+</project>
